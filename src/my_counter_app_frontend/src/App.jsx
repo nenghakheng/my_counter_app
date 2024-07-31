@@ -1,8 +1,7 @@
-import { useState } from 'react';
-import { my_counter_app_backend } from 'declarations/my_counter_app_backend';
+import { useState } from "react";
+import { my_counter_app_backend } from "declarations/my_counter_app_backend";
 
 function App() {
-
   const [counter, setCounter] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +20,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   const increment = async () => {
     if (loading) return; // Cancel if waiting for a new count
@@ -30,6 +29,18 @@ function App() {
       let result = await my_counter_app_backend.inc(); // Increment the count by 1
       console.log(`[increment] result:`, result);
       console.log(`[increment] hash:`, result.hash);
+      await fetchCount(); // Fetch the new count
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const decrement = async () => {
+    if (loading) return; // Cancel if waiting for a new count
+    try {
+      setLoading(true);
+      let result = await my_counter_app_backend.dec(); // Decrement the count by 1
+      console.log(`[decrement] result:`, result);
       await fetchCount(); // Fetch the new count
     } finally {
       setLoading(false);
@@ -45,7 +56,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };  
+  };
 
   return (
     <main>
@@ -55,16 +66,21 @@ function App() {
       Counter: {counter}
       <br />
       <br />
-      <button onClick={increment} style={{ opacity: loading ? 0.5 : 1 }} >Increment</button>
+      <button onClick={increment} style={{ opacity: loading ? 0.5 : 1 }}>
+        Increment
+      </button>
       <br />
       <br />
-      <button>Decrement (Add your code)</button>
+      <button onClick={decrement} style={{ opacity: loading ? 0.5 : 1 }}>
+        Decrement
+      </button>
       <br />
       <br />
-      <button onClick={reset} style={{ opacity: loading ? 0.5 : 1 }} >Reset to zero</button>
+      <button onClick={reset} style={{ opacity: loading ? 0.5 : 1 }}>
+        Reset to zero
+      </button>
       <br />
       <br />
-
     </main>
   );
 }
